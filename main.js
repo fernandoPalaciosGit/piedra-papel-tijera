@@ -1,3 +1,18 @@
+var APP = {
+	opcionesMano : {
+		0 : 'piedra',
+		1 : 'papel',
+		2 : 'tijera',
+		3 : 'lagarto',
+		4 : 'spock'
+	},
+	countingGame : {
+		win : 0,
+		lose : 0,
+		draw : 0
+	}
+}
+
 var init = function (){
 	//manejador de eventos de formulario
 	document.forms.formPlayGame.addEventListener('submit', checkResponse, false);
@@ -22,22 +37,17 @@ var aleatorio = function (minimo, maximo){
 };
 
 var checkBetting = function (userResponse){
-	var	opcionesMano = {
-				0 : 'piedra',
-				1 : 'papel',
-				2 : 'tijera',
-				3 : 'lagarto',
-				4 : 'spock'
-			},
-			opcionUsuario = userResponse.value,
+	var	opcionUsuario = userResponse.value,
 			opcionMaquina = aleatorio(0, 4),
-			humanBet = opcionesMano[ parseInt(opcionUsuario, 10) ],
-			machineBet = opcionesMano[ opcionMaquina ];
+			humanBet = APP.opcionesMano[ parseInt(opcionUsuario, 10) ],
+			machineBet = APP.opcionesMano[ opcionMaquina ];
 
 	if( humanBet === machineBet ){ //EMPATE
 		window.alert( empateResponse(humanBet, machineBet) );
+		APP.countingGame.draw++;
+		document.querySelector('#empates').innerText = APP.countingGame.draw;
 	}else{ //JUEGO
-		playGame(humanBet, machineBet, opcionesMano);
+		playGame(humanBet, machineBet, APP.opcionesMano);
 	}
 };
 
@@ -84,6 +94,13 @@ var playGame = function (humanBet, machineBet, opciones){
 		}
 
 	window.alert( resultResponse(humanBet, machineBet, result) );
+	if( result === win ){
+		APP.countingGame.win++;
+		document.querySelector('#victorias').innerText = APP.countingGame.win;
+	}else{
+		APP.countingGame.lose++;
+		document.querySelector('#derrotas').innerText = APP.countingGame.lose;
+	}
 };
 
 var resultResponse = function (humanBet, machineBet, result){
